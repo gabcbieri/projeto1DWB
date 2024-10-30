@@ -1,49 +1,49 @@
 // Modal 
 const btnLogin = document.getElementById('btnLogin');
 const btnFechar = document.getElementById('btnFechar');
+const login = document.getElementById('login'); // Referência ao modal
 
-btnLogin.onclick = function(){
+btnLogin.onclick = function() {
     login.showModal();
 }
 
-btnFechar.onclick = function(){
+btnFechar.onclick = function() {
     login.close();
 }
 
 // Login
-const login = document.getElementById('login');
-const formLogin = document.querySelector('#login form');
+const formLogin = login.querySelector('form'); // Pegue o formulário do modal
 
 // Criando usuários para teste
 let dadosUsuarios = [
-        { nome: "user", email: "email@email.com", senha: "123" },
-        { nome: "aluno", email: "aluno@email.com", senha: "aluno123" },
-        { nome: "root", email: "root@email.com", senha: "root" },
-    ];
+    { nome: "user", email: "email@email.com", senha: "123" },
+    { nome: "aluno", email: "aluno@email.com", senha: "aluno123" },
+    { nome: "root", email: "root@email.com", senha: "root" },
+];
 
-formLogin.addEventListener('submit', (evento) =>{
+formLogin.addEventListener('submit', (evento) => {
     evento.preventDefault();
 
-    let msgErro = document.querySelector('.erro');
-    if(msgErro){
+    let msgErro = login.querySelector('.erro');
+    if (msgErro) {
         login.removeChild(msgErro);
     }
 
     let email = document.getElementById('email').value;
     let senha = document.getElementById('senha').value;
 
-    dadosUsuarios.forEach( usuario => {
-        if (email == usuario.email && senha == usuario.senha) {
+    let usuarioEncontrado = false; // Flag para verificar se o usuário foi encontrado
+
+    dadosUsuarios.forEach(usuario => {
+        if (email === usuario.email && senha === usuario.senha) {
             sessionStorage.setItem('usuarioLogado', "true");
             sessionStorage.setItem('nomeUsuario', usuario.nome);
-
+            usuarioEncontrado = true; // O usuário foi encontrado
             window.location.href = "./relat.html";
         }
     });
 
-    let usuarioLogado = sessionStorage.getItem('usuarioLogado');
-
-    if(!usuarioLogado){
+    if (!usuarioEncontrado) {
         let erro = document.createElement('p');
         erro.classList.add('erro');
         erro.innerText = "Login ou senha errados";
@@ -51,5 +51,4 @@ formLogin.addEventListener('submit', (evento) =>{
 
         document.querySelector('#login form').reset();
     }
-
 });
